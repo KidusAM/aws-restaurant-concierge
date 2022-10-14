@@ -1,4 +1,5 @@
 var checkout = {};
+var global_my_id = Cookies.get('global_my_id')
 
 $(document).ready(function() {
   var $messages = $('.messages-content'),
@@ -31,6 +32,7 @@ $(document).ready(function() {
       messages: [{
         type: 'unstructured',
         unstructured: {
+	  id : global_my_id,
           text: message
         }
       }]
@@ -59,6 +61,8 @@ $(document).ready(function() {
 
           for (var message of messages) {
             if (message.type === 'unstructured') {
+	      global_my_id = message.unstructured.id
+              Cookies.set("global_my_id", global_my_id)
               insertResponseMessage(message.unstructured.text);
             } else if (message.type === 'structured' && message.structured.type === 'product') {
               var html = '';
