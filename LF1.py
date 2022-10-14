@@ -61,12 +61,11 @@ def make_recommendation(intent_request):
         QueueUrl = queue_url,
         MessageBody = json.dumps(cur_item),
     )
-    
     # save the preferences of the user in dynamodb
     prefs = {
         'user_id' : {'S' : intent_request['userId']}, 
         'location_pref' : {'S' : cur_item['Location']},
-        'cuisine_pref' : {'S' : cur_item['Cuisine']}
+        'email_pref' : {'S' : cur_item['EmailAddress']}
     }
     dynamodb.put_item(
         TableName='user-preferences',
@@ -101,9 +100,9 @@ def dispatch(intent_request):
             Key = {'user_id' : {'S' : user_id}})
         if 'Item' in pref:
             location_pref = pref['Item']['location_pref']['S']
-            cuisine_pref = pref['Item']['cuisine_pref']['S']
+            email_pref = pref['Item']['email_pref']['S']
             slots['Location'] = location_pref
-            slots['Cuisine'] = cuisine_pref
+            slots['EmailAddress'] = email_pref
         
         
         next_slot = ''
